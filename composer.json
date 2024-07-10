@@ -1,6 +1,6 @@
 {
   "name": "ctidigital/magento2-csp-whitelist",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Control CSP via the admin area",
   "type": "magento2-module",
   "license": [
