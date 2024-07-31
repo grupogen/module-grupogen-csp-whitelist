@@ -75,8 +75,10 @@ class Configuration extends AbstractHelper
      */
     public function getScripts($storeId = null): string
     {
-        $scripts = '';
         $scripts = $this->scopeConfig->getValue(self::CONFIG_SECURE_SCRIPTS,ScopeInterface::SCOPE_STORE,$storeId);
+        if (is_null($scripts)) {
+            $scripts = '';
+        }
         return $scripts;
     }
 }
