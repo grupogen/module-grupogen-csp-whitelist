@@ -1,0 +1,13 @@
+<?php
+
+    $helper = $this->helper('CtiDigital\CspWhitelist\Helper\Configuration');
+    $scriptsEnabled = $helper->isSecureScriptsEnabled();
+    if ($scriptsEnabled) {
+        $scripts = $helper->getScripts();
+        $scriptString = <<<script
+            $scripts
+        script;
+        echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
+    }
+    
+?>

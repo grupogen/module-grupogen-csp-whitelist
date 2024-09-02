@@ -53,15 +53,26 @@ class CspWhitelist
         $customPolicies = $this->configuration->getPolicies();
         $policies = $defaultPolicies;
         $config = $this->configReader->get(null);
-        foreach ($config as $policyId => $values) {
-            if (isset($customPolicies[$policyId])) {
-                foreach ($customPolicies[$policyId] as $policy) {
+        foreach ($defaultPolicies as $defaultPolicyId => $defaultValues) {
+
+            if (isset($config[$defaultPolicyId])) {
+                $values = $config[$defaultPolicyId];
+            }
+            else {
+                $values = [
+                 "hosts"=> [],
+                 "hashes"=> []
+                ];
+            }
+            
+            if (isset($customPolicies[$defaultPolicyId])) {
+                foreach ($customPolicies[$defaultPolicyId] as $policy) {
                     $values['hosts'][] = $policy;
                 }
             }
 
             $policies[] = $this->fetchPolicy->create([
-                'id' => $policyId,
+                'id' => $defaultPolicyId,
                 'noneAllowed' => false,
                 'hostSources' => $values['hosts'],
                 'schemeSources' => [],

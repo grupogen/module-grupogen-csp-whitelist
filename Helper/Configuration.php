@@ -5,12 +5,15 @@ namespace CtiDigital\CspWhitelist\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\Helper\Context;
+use Magento\Store\Model\ScopeInterface;
 
 class Configuration extends AbstractHelper
 {
 
     const CONFIG_ENABLE = 'csp/general/enabled';
     const CONFIG_POLICIES = 'csp/general/policies';
+    const CONFIG_SECURE_SCRIPTS_ENABLE = 'csp/secure_scripts/enabled';
+    const CONFIG_SECURE_SCRIPTS = 'csp/secure_scripts/scripts';
 
     /** @var Json */
     private $serialize;
@@ -38,6 +41,16 @@ class Configuration extends AbstractHelper
     }
 
     /**
+     * check to see if module is enabled
+     *
+     * @return bool
+     */
+    public function isSecureScriptsEnabled($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(self::CONFIG_SECURE_SCRIPTS_ENABLE,ScopeInterface::SCOPE_STORE,$storeId);
+    }
+
+    /**
      * get a list of policies
      *
      * @return array
@@ -53,5 +66,19 @@ class Configuration extends AbstractHelper
             $data[$policy['policy']][] = $policy['value'];
         }
         return $data;
+    }
+
+    /**
+     * get a list of policies
+     *
+     * @return string
+     */
+    public function getScripts($storeId = null): string
+    {
+        $scripts = $this->scopeConfig->getValue(self::CONFIG_SECURE_SCRIPTS,ScopeInterface::SCOPE_STORE,$storeId);
+        if (is_null($scripts)) {
+            $scripts = '';
+        }
+        return $scripts;
     }
 }
